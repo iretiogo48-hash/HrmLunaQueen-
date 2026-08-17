@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HrmLunaQueen | Female Vaginal Health</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+    <header>
+        <h1>HrmLunaQueen</h1>
+        <p>Female Vaginal Health Study</p>
+    </header>
+
+
+    <!-- DECK SCREEN -->
+    <section id="deckScreen">
+
+        <div class="section-title">
+            <h2>Health Study Decks</h2>
+
+            <button onclick="showCreateDeck()">
+                + Create Deck
+            </button>
+        </div>
+
+        <div id="deckList" class="deck-list"></div>
+
+    </section>
+
+
+    <!-- STUDY SCREEN -->
+    <section id="studyScreen" class="hidden">
+
+        <div class="top-bar">
+
+            <button onclick="showDecks()">
+                ← Decks
+            </button>
+
+            <div class="deck-heading">
+                <h2 id="studyDeckName">
+                    Vaginal Health
+                </h2>
+
+                <small id="studyProgress">
+                    1 / 1
+                </small>
+            </div>
+
+            <button onclick="startQuiz()">
+                Quiz
+            </button>
+
+        </div>
+
+
+        <!-- FLASHCARD -->
+
+        <div
+            class="flashcard-container"
+            onclick="flipCard()"
+        >
+
+            <div id="flashcard" class="flashcard">
+
+                <!-- FRONT -->
+
+                <div class="card-face card-front">
+
+                    <span class="card-label">
+                        QUESTION
+                    </span>
+
+                    <h2 id="frontText">
+                        Question
+                    </h2>
+
+                    <p class="flip-hint">
+                        Tap the card to reveal the answer
+                    </p>
+
+                </div>
+
+
+                <!-- BACK -->
+
+                <div class="card-face card-back">
+
+                    <span class="card-label">
+                        ANSWER
+                    </span>
+
+                    <h2 id="backText">
+                        Answer
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- SPACED REPETITION -->
+
+        <div
+            id="ratingButtons"
+            class="rating-section hidden"
+        >
+
+            <p>
+                How well did you remember this?
+            </p>
+
+            <div class="rating-grid">
+
+                <button onclick="rateCard(0)">
+                    Again
+                    <small>1 day</small>
+                </button>
+
+                <button onclick="rateCard(1)">
+                    Hard
+                    <small>2 days</small>
+                </button>
+
+                <button onclick="rateCard(2)">
+                    Good
+                    <small>4 days</small>
+                </button>
+
+                <button onclick="rateCard(3)">
+                    Easy
+                    <small>7 days</small>
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="controls">
+
+            <button onclick="previousCard()">
+                ← Previous
+            </button>
+
+            <button onclick="flipCard()">
+                Flip
+            </button>
+
+            <button onclick="nextCard()">
+                Next →
+            </button>
+
+        </div>
+
+
+        <div class="study-actions">
+
+            <button onclick="addCardPrompt()">
+                + Add Card
+            </button>
+
+            <button onclick="deleteCurrentCard()">
+                Delete Card
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- QUIZ SCREEN -->
+
+    <section id="quizScreen" class="hidden">
+
+        <div class="top-bar">
+
+            <button onclick="showStudy()">
+                ← Study
+            </button>
+
+            <h2>Quiz Mode</h2>
+
+            <span id="quizScore">
+                Score: 0
+            </span>
+
+        </div>
+
+
+        <div class="quiz-box">
+
+            <span class="card-label">
+                QUESTION
+            </span>
+
+            <h2 id="quizQuestion">
+                Question
+            </h2>
+
+            <div
+                id="quizOptions"
+                class="quiz-options"
+            ></div>
+
+            <p id="quizFeedback"></p>
+
+            <button
+                id="nextQuizButton"
+                class="hidden"
+                onclick="nextQuizQuestion()"
+            >
+                Next Question
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CREATE DECK MODAL -->
+
+    <div
+        id="deckModal"
+        class="modal hidden"
+    >
+
+        <div class="modal-content">
+
+            <h2>Create Health Deck</h2>
+
+            <input
+                id="deckNameInput"
+                type="text"
+                placeholder="Example: Menstrual Health"
+            >
+
+            <div class="modal-buttons">
+
+                <button onclick="createDeck()">
+                    Create
+                </button>
+
+                <button onclick="closeDeckModal()">
+                    Cancel
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
