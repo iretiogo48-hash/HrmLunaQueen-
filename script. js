@@ -1,0 +1,1402 @@
+/* =====================================================
+   HrmLunaQueen
+   Female Vaginal Health Flashcard Study App
+
+   Features:
+   - Decks
+   - Flashcards
+   - Quiz mode
+   - Spaced repetition
+   - Offline browser storage
+===================================================== */
+
+
+/* =====================================================
+   DEFAULT FEMALE HEALTH DECKS
+===================================================== */
+
+const defaultDecks = [
+
+    {
+        id: 1001,
+        name: "Vaginal Health Basics",
+
+        cards: [
+
+            {
+                id: 1,
+                question:
+                    "What is the vagina?",
+
+                answer:
+                    "The vagina is a muscular canal that connects the cervix to the outside of the body.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 2,
+                question:
+                    "What is the vulva?",
+
+                answer:
+                    "The vulva is the external genital area, including the labia, clitoris and openings of the vagina and urethra.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 3,
+                question:
+                    "Does the vagina normally have bacteria?",
+
+                answer:
+                    "Yes. A healthy vagina normally contains microorganisms, including Lactobacillus bacteria, that are part of its natural environment.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 4,
+                question:
+                    "Should you douche to clean the vagina?",
+
+                answer:
+                    "No. The vagina is self-cleaning, and douching can disturb its natural balance and increase the risk of problems such as bacterial vaginosis.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 5,
+                question:
+                    "What is a healthy way to clean the vulva?",
+
+                answer:
+                    "Gently wash the external vulva with water and, if desired, a mild unscented cleanser. Avoid putting soap or other products inside the vagina.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 6,
+                question:
+                    "Why can breathable underwear be helpful?",
+
+                answer:
+                    "Breathable fabrics can reduce trapped moisture and heat around the genital area. Changing out of damp clothing promptly can also help keep the area comfortable.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            }
+
+        ]
+    },
+
+
+    {
+        id: 1002,
+        name: "Vaginal Discharge",
+
+        cards: [
+
+            {
+                id: 7,
+                question:
+                    "Is vaginal discharge always abnormal?",
+
+                answer:
+                    "No. Normal discharge can vary in amount, color and consistency during the menstrual cycle.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 8,
+                question:
+                    "What discharge changes may need medical attention?",
+
+                answer:
+                    "A new or unusual change accompanied by strong odor, itching, burning, pain or other symptoms should be evaluated by a healthcare professional.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 9,
+                question:
+                    "Can normal discharge change during the menstrual cycle?",
+
+                answer:
+                    "Yes. Hormonal changes can cause discharge to become different in amount and consistency at different times of the cycle.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            }
+
+        ]
+    },
+
+
+    {
+        id: 1003,
+        name: "Infections & Warning Signs",
+
+        cards: [
+
+            {
+                id: 10,
+                question:
+                    "What is bacterial vaginosis?",
+
+                answer:
+                    "Bacterial vaginosis is a condition caused by a change in the balance of bacteria in the vagina. It can cause unusual discharge or odor, although some people have no symptoms.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 11,
+                question:
+                    "What is a vaginal yeast infection?",
+
+                answer:
+                    "A vaginal yeast infection is an overgrowth of Candida yeast. It commonly causes itching, irritation and abnormal discharge.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 12,
+                question:
+                    "Can sexually transmitted infections cause vaginal symptoms?",
+
+                answer:
+                    "Yes. Some sexually transmitted infections can cause discharge, pain, sores, burning during urination or other symptoms, while some cause no symptoms at all.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            },
+
+            {
+                id: 13,
+                question:
+                    "When should unusual vaginal symptoms be checked?",
+
+                answer:
+                    "Seek medical advice for persistent or unusual odor, discharge, itching, burning, sores, pelvic pain, bleeding outside your normal period or symptoms after possible STI exposure.",
+
+                interval: 1,
+                ease: 2.5,
+                repetitions: 0,
+                due: Date.now()
+            }
+
+        ]
+    }
+
+];
+
+
+/* =====================================================
+   LOAD / SAVE FROM BROWSER
+===================================================== */
+
+let storedData =
+    localStorage.getItem(
+        "HrmLunaQueen_VaginalHealth"
+    );
+
+
+let appData;
+
+
+if (storedData) {
+
+    try {
+
+        appData = JSON.parse(storedData);
+
+    } catch (error) {
+
+        appData = {
+            decks: defaultDecks
+        };
+
+    }
+
+} else {
+
+    appData = {
+        decks: defaultDecks
+    };
+
+}
+
+
+function saveData() {
+
+    localStorage.setItem(
+        "HrmLunaQueen_VaginalHealth",
+        JSON.stringify(appData)
+    );
+
+}
+
+
+/* =====================================================
+   SCREEN ELEMENTS
+===================================================== */
+
+const deckScreen =
+    document.getElementById("deckScreen");
+
+const studyScreen =
+    document.getElementById("studyScreen");
+
+const quizScreen =
+    document.getElementById("quizScreen");
+
+
+function hideScreens() {
+
+    deckScreen.classList.add("hidden");
+
+    studyScreen.classList.add("hidden");
+
+    quizScreen.classList.add("hidden");
+
+}
+
+
+function showDecks() {
+
+    hideScreens();
+
+    deckScreen.classList.remove("hidden");
+
+    renderDecks();
+
+}
+
+
+function showStudy() {
+
+    hideScreens();
+
+    studyScreen.classList.remove("hidden");
+
+    renderStudyCard();
+
+}
+
+
+/* =====================================================
+   DECK MANAGEMENT
+===================================================== */
+
+let currentDeck = null;
+
+let currentCardIndex = 0;
+
+
+function renderDecks() {
+
+    const deckList =
+        document.getElementById("deckList");
+
+
+    deckList.innerHTML = "";
+
+
+    if (appData.decks.length === 0) {
+
+        deckList.innerHTML = `
+            <p>No decks yet.
+            Create your first study deck.</p>
+        `;
+
+        return;
+
+    }
+
+
+    appData.decks.forEach(deck => {
+
+        const element =
+            document.createElement("div");
+
+
+        element.className = "deck";
+
+
+        element.innerHTML = `
+
+            <h3>
+                ${escapeHTML(deck.name)}
+            </h3>
+
+            <p>
+                ${deck.cards.length}
+                ${deck.cards.length === 1
+                    ? "card"
+                    : "cards"}
+            </p>
+
+            <div class="deck-buttons">
+
+                <button
+                    onclick="openDeck(${deck.id})"
+                >
+                    Study
+                </button>
+
+                <button
+                    onclick="startQuizFromDeck(${deck.id})"
+                >
+                    Quiz
+                </button>
+
+                <button
+                    onclick="deleteDeck(${deck.id})"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        `;
+
+
+        deckList.appendChild(element);
+
+    });
+
+}
+
+
+/* =====================================================
+   CREATE DECK
+===================================================== */
+
+function showCreateDeck() {
+
+    document
+        .getElementById("deckModal")
+        .classList.remove("hidden");
+
+
+    document
+        .getElementById("deckNameInput")
+        .focus();
+
+}
+
+
+function closeDeckModal() {
+
+    document
+        .getElementById("deckModal")
+        .classList.add("hidden");
+
+}
+
+
+function createDeck() {
+
+    const input =
+        document.getElementById(
+            "deckNameInput"
+        );
+
+
+    const name =
+        input.value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "Please enter a deck name."
+        );
+
+        return;
+
+    }
+
+
+    const newDeck = {
+
+        id: Date.now(),
+
+        name: name,
+
+        cards: []
+
+    };
+
+
+    appData.decks.push(newDeck);
+
+    saveData();
+
+    input.value = "";
+
+    closeDeckModal();
+
+    renderDecks();
+
+}
+
+
+/* =====================================================
+   DELETE DECK
+===================================================== */
+
+function deleteDeck(id) {
+
+    const deck =
+        appData.decks.find(
+            d => d.id === id
+        );
+
+
+    if (!deck) return;
+
+
+    if (
+        !confirm(
+            `Delete "${deck.name}" and all its cards?`
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    appData.decks =
+        appData.decks.filter(
+            d => d.id !== id
+        );
+
+
+    saveData();
+
+    renderDecks();
+
+}
+
+
+/* =====================================================
+   OPEN DECK
+===================================================== */
+
+function openDeck(id) {
+
+    currentDeck =
+        appData.decks.find(
+            deck => deck.id === id
+        );
+
+
+    if (!currentDeck) return;
+
+
+    currentCardIndex = 0;
+
+    showStudy();
+
+}
+
+
+/* =====================================================
+   RENDER CURRENT CARD
+===================================================== */
+
+function renderStudyCard() {
+
+    if (!currentDeck) return;
+
+
+    document.getElementById(
+        "studyDeckName"
+    ).textContent =
+        currentDeck.name;
+
+
+    const total =
+        currentDeck.cards.length;
+
+
+    document.getElementById(
+        "studyProgress"
+    ).textContent =
+        total === 0
+            ? "No cards"
+            : `${currentCardIndex + 1} / ${total}`;
+
+
+    const flashcard =
+        document.getElementById(
+            "flashcard"
+        );
+
+
+    flashcard.classList.remove(
+        "flipped"
+    );
+
+
+    document
+        .getElementById(
+            "ratingButtons"
+        )
+        .classList.add("hidden");
+
+
+    if (total === 0) {
+
+        document.getElementById(
+            "frontText"
+        ).textContent =
+            "No cards yet";
+
+
+        document.getElementById(
+            "backText"
+        ).textContent =
+            "Use + Add Card to create one.";
+
+
+        return;
+
+    }
+
+
+    const card =
+        currentDeck.cards[
+            currentCardIndex
+        ];
+
+
+    document.getElementById(
+        "frontText"
+    ).textContent =
+        card.question;
+
+
+    document.getElementById(
+        "backText"
+    ).textContent =
+        card.answer;
+
+}
+
+
+/* =====================================================
+   FLIP CARD
+===================================================== */
+
+function flipCard() {
+
+    if (
+        !currentDeck ||
+        currentDeck.cards.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const flashcard =
+        document.getElementById(
+            "flashcard"
+        );
+
+
+    flashcard.classList.toggle(
+        "flipped"
+    );
+
+
+    const ratingButtons =
+        document.getElementById(
+            "ratingButtons"
+        );
+
+
+    if (
+        flashcard.classList.contains(
+            "flipped"
+        )
+    ) {
+
+        ratingButtons.classList.remove(
+            "hidden"
+        );
+
+    } else {
+
+        ratingButtons.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   NEXT CARD
+===================================================== */
+
+function nextCard() {
+
+    if (!currentDeck) return;
+
+
+    if (currentDeck.cards.length === 0) {
+        return;
+    }
+
+
+    currentCardIndex++;
+
+
+    if (
+        currentCardIndex >=
+        currentDeck.cards.length
+    ) {
+
+        currentCardIndex = 0;
+
+    }
+
+
+    renderStudyCard();
+
+}
+
+
+/* =====================================================
+   PREVIOUS CARD
+===================================================== */
+
+function previousCard() {
+
+    if (!currentDeck) return;
+
+
+    if (currentDeck.cards.length === 0) {
+        return;
+    }
+
+
+    currentCardIndex--;
+
+
+    if (currentCardIndex < 0) {
+
+        currentCardIndex =
+            currentDeck.cards.length - 1;
+
+    }
+
+
+    renderStudyCard();
+
+}
+
+
+/* =====================================================
+   ADD FLASHCARD
+===================================================== */
+
+function addCardPrompt() {
+
+    if (!currentDeck) return;
+
+
+    const question =
+        prompt(
+            "Enter your health question:"
+        );
+
+
+    if (!question) return;
+
+
+    const answer =
+        prompt(
+            "Enter the answer:"
+        );
+
+
+    if (!answer) return;
+
+
+    const card = {
+
+        id: Date.now(),
+
+        question:
+            question.trim(),
+
+        answer:
+            answer.trim(),
+
+        interval: 1,
+
+        ease: 2.5,
+
+        repetitions: 0,
+
+        due: Date.now()
+
+    };
+
+
+    currentDeck.cards.push(card);
+
+
+    currentCardIndex =
+        currentDeck.cards.length - 1;
+
+
+    saveData();
+
+    renderStudyCard();
+
+}
+
+
+/* =====================================================
+   DELETE CARD
+===================================================== */
+
+function deleteCurrentCard() {
+
+    if (!currentDeck) return;
+
+
+    if (currentDeck.cards.length === 0) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "Delete this flashcard?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    currentDeck.cards.splice(
+        currentCardIndex,
+        1
+    );
+
+
+    if (
+        currentCardIndex >=
+        currentDeck.cards.length
+    ) {
+
+        currentCardIndex =
+            Math.max(
+                0,
+                currentDeck.cards.length - 1
+            );
+
+    }
+
+
+    saveData();
+
+    renderStudyCard();
+
+}
+
+
+/* =====================================================
+   SPACED REPETITION
+===================================================== */
+
+function rateCard(rating) {
+
+    if (!currentDeck) return;
+
+
+    const card =
+        currentDeck.cards[
+            currentCardIndex
+        ];
+
+
+    if (!card) return;
+
+
+    /*
+        Rating:
+
+        0 = Again
+        1 = Hard
+        2 = Good
+        3 = Easy
+    */
+
+
+    if (rating === 0) {
+
+        card.interval = 1;
+
+        card.repetitions = 0;
+
+        card.ease =
+            Math.max(
+                1.3,
+                card.ease - 0.20
+            );
+
+    }
+
+
+    else if (rating === 1) {
+
+        card.interval =
+            Math.max(
+                2,
+                Math.round(
+                    card.interval * 1.2
+                )
+            );
+
+        card.ease =
+            Math.max(
+                1.3,
+                card.ease - 0.15
+            );
+
+        card.repetitions++;
+
+    }
+
+
+    else if (rating === 2) {
+
+        if (
+            card.repetitions === 0
+        ) {
+
+            card.interval = 1;
+
+        }
+
+        else if (
+            card.repetitions === 1
+        ) {
+
+            card.interval = 3;
+
+        }
+
+        else {
+
+            card.interval =
+                Math.round(
+                    card.interval *
+                    card.ease
+                );
+
+        }
+
+
+        card.repetitions++;
+
+    }
+
+
+    else if (rating === 3) {
+
+        if (
+            card.repetitions === 0
+        ) {
+
+            card.interval = 3;
+
+        }
+
+        else {
+
+            card.interval =
+                Math.round(
+                    card.interval *
+                    card.ease *
+                    1.3
+                );
+
+        }
+
+
+        card.ease += 0.15;
+
+        card.repetitions++;
+
+    }
+
+
+    /* Schedule next review */
+
+    const day =
+        24 * 60 * 60 * 1000;
+
+
+    card.due =
+        Date.now() +
+        card.interval * day;
+
+
+    saveData();
+
+
+    nextCard();
+
+}
+
+
+/* =====================================================
+   QUIZ MODE
+===================================================== */
+
+let quizCards = [];
+
+let quizIndex = 0;
+
+let quizScore = 0;
+
+
+function startQuizFromDeck(id) {
+
+    currentDeck =
+        appData.decks.find(
+            d => d.id === id
+        );
+
+
+    if (!currentDeck) return;
+
+
+    startQuiz();
+
+}
+
+
+function startQuiz() {
+
+    if (!currentDeck) return;
+
+
+    if (currentDeck.cards.length < 2) {
+
+        alert(
+            "Add at least 2 cards before starting a quiz."
+        );
+
+        return;
+
+    }
+
+
+    hideScreens();
+
+    quizScreen.classList.remove(
+        "hidden"
+    );
+
+
+    quizCards =
+        [...currentDeck.cards]
+        .sort(
+            () => Math.random() - 0.5
+        );
+
+
+    quizIndex = 0;
+
+    quizScore = 0;
+
+
+    document.getElementById(
+        "quizScore"
+    ).textContent =
+        "Score: 0";
+
+
+    showQuizQuestion();
+
+}
+
+
+/* =====================================================
+   QUIZ QUESTION
+===================================================== */
+
+function showQuizQuestion() {
+
+    if (
+        quizIndex >=
+        quizCards.length
+    ) {
+
+        finishQuiz();
+
+        return;
+
+    }
+
+
+    const card =
+        quizCards[quizIndex];
+
+
+    document.getElementById(
+        "quizQuestion"
+    ).textContent =
+        card.question;
+
+
+    document.getElementById(
+        "quizFeedback"
+    ).textContent = "";
+
+
+    document
+        .getElementById(
+            "nextQuizButton"
+        )
+        .classList.add(
+            "hidden"
+        );
+
+
+    const container =
+        document.getElementById(
+            "quizOptions"
+        );
+
+
+    container.innerHTML = "";
+
+
+    /*
+        Create incorrect answers.
+    */
+
+    let wrongAnswers =
+        currentDeck.cards
+        .filter(
+            c => c.id !== card.id
+        )
+        .map(
+            c => c.answer
+        );
+
+
+    wrongAnswers =
+        wrongAnswers
+        .sort(
+            () => Math.random() - 0.5
+        )
+        .slice(0, 3);
+
+
+    let options = [
+        card.answer,
+        ...wrongAnswers
+    ];
+
+
+    options =
+        options.sort(
+            () => Math.random() - 0.5
+        );
+
+
+    options.forEach(
+        option => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+
+            button.textContent =
+                option;
+
+
+            button.onclick =
+                function() {
+
+                    checkQuizAnswer(
+                        option,
+                        card.answer,
+                        button
+                    );
+
+                };
+
+
+            container.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CHECK QUIZ ANSWER
+===================================================== */
+
+function checkQuizAnswer(
+    selected,
+    correct,
+    clickedButton
+) {
+
+    const buttons =
+        document.querySelectorAll(
+            "#quizOptions button"
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.disabled = true;
+
+        }
+    );
+
+
+    const feedback =
+        document.getElementById(
+            "quizFeedback"
+        );
+
+
+    if (
+        selected === correct
+    ) {
+
+        quizScore++;
+
+
+        feedback.textContent =
+            "✓ Correct!";
+
+
+        clickedButton.style.boxShadow =
+            "0 0 15px white";
+
+
+    } else {
+
+        feedback.textContent =
+            "✗ Not quite. Correct answer: " +
+            correct;
+
+    }
+
+
+    document.getElementById(
+        "quizScore"
+    ).textContent =
+        "Score: " +
+        quizScore;
+
+
+    document
+        .getElementById(
+            "nextQuizButton"
+        )
+        .classList.remove(
+            "hidden"
+        );
+
+}
+
+
+/* =====================================================
+   NEXT QUIZ QUESTION
+===================================================== */
+
+function nextQuizQuestion() {
+
+    quizIndex++;
+
+    showQuizQuestion();
+
+}
+
+
+/* =====================================================
+   QUIZ FINISHED
+===================================================== */
+
+function finishQuiz() {
+
+    const percentage =
+        Math.round(
+            (quizScore /
+                quizCards.length) *
+            100
+        );
+
+
+    document.getElementById(
+        "quizQuestion"
+    ).textContent =
+        "Quiz Complete!";
+
+
+    document.getElementById(
+        "quizOptions"
+    ).innerHTML = `
+
+        <h2>
+            ${quizScore} / ${quizCards.length}
+        </h2>
+
+        <p>
+            You scored ${percentage}%.
+        </p>
+
+    `;
+
+
+    document.getElementById(
+        "quizFeedback"
+    ).textContent =
+        "Keep learning and reviewing!";
+
+}
+
+
+/* =====================================================
+   SAFE TEXT
+===================================================== */
+
+function escapeHTML(text) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.textContent = text;
+
+
+    return element.innerHTML;
+
+}
+
+
+/* =====================================================
+   KEYBOARD CONTROLS
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            !studyScreen.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            if (
+                event.code === "Space"
+            ) {
+
+                event.preventDefault();
+
+                flipCard();
+
+            }
+
+
+            if (
+                event.key === "ArrowRight"
+            ) {
+
+                nextCard();
+
+            }
+
+
+            if (
+                event.key === "ArrowLeft"
+            ) {
+
+                previousCard();
+
+            }
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   START APPLICATION
+===================================================== */
+
+saveData();
+
+renderDecks();
